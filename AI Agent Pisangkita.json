@@ -1,0 +1,158 @@
+{
+  "name": "AI Agent Pisangkita",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "availableInChat": true,
+        "agentName": "Bot_Pisangkita",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c032a48a-4588-452d-8b7e-6ca3b174480a",
+      "name": "When chat message received",
+      "webhookId": "7789219d-d4c4-4dd3-a24d-f344aca61387",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah asisten virtual Pisangkita yang ramah. Gunakan data di Google Sheets untuk menjawab pertanyaan pelanggan tentang menu, harga, dan stok. Selalu sapa mereka dengan 'Sobat Pisang"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6ac5bf57-efda-49d1-9cab-01ba2c5fa6b3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "fbab3c77-988e-46c7-8a0f-622d99ad7cfd",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "wPGxL7Q7ShyIea6T",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "19f6fd93-2bb1-42a8-bde0-67686a805092",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1aYLFOzoF7DpPDkRMwaYYzW3fM2wlP2MBXhL1Cpz33og/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Menu_Utama",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1aYLFOzoF7DpPDkRMwaYYzW3fM2wlP2MBXhL1Cpz33og/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        208
+      ],
+      "id": "f7125fdb-59e9-498d-8f6a-33f7be70b49e",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HCvYA939Bd1tmgGU",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e12a18e9-fcbb-4fb2-99d3-d4463f0d8293",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f045ba6db209a7fbe52bca62796be847c82e1838f5803d1b76d40f5d083c9ed8"
+  },
+  "id": "A91I6sVp4kV17Fup",
+  "tags": []
+}
